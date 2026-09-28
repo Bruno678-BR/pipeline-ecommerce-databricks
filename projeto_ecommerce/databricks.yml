@@ -1,0 +1,37 @@
+# Declarative Automation Bundle definition for projeto_ecommerce.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: projeto_ecommerce
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: O catálogo do Unity Catalog a ser utilizado
+    default: projeto_ao_vivo
+  schema:
+    description: O schema padrão para o pipeline
+    default: silver
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-45dd8596-1b73.cloud.databricks.com
+    variables:
+      catalog: projeto_ao_vivo
+      schema: silver
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-45dd8596-1b73.cloud.databricks.com
+      root_path: /Workspace/Users/brunocoimbrarosa@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: projeto_ao_vivo
+      schema: silver
+    permissions:
+      - user_name: brunocoimbrarosa@gmail.com
+        level: CAN_MANAGE

@@ -1,0 +1,7 @@
+# Aula 4: os diretores perguntam em português, o Genie responde em cima da gold.
+resources:
+  genie_spaces:
+    diretoria_ecommerce:
+      title: "[dev brunocoimbrarosa] Diretoria E-commerce"
+      parent_path: ${workspace.root_path}
+      warehouse_id: "7922cdd88247a667"

@@ -1,0 +1,11 @@
+# Slides da imersão: têm material de lançamento (senha do certificado)
+*.pptx
+
+# Estado local da Databricks CLI / bundles
+.databricks/
+
+# Sistema e Python
+.DS_Store
+__pycache__/
+*.pyc
+.venv/

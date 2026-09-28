@@ -1,0 +1,73 @@
+{
+    "display_name": "01 - Diretoria Comercial",
+    "warehouse_id": "serverless_starter_warehouse",
+    "datasets": [
+        {
+            "name": "ds_comercial",
+            "query": "SELECT id_venda, data_venda, hora, dia_semana, CASE WHEN canal_venda = 'ecommerce' THEN 'E-commerce' WHEN canal_venda = 'loja_fisica' THEN 'Loja física' ELSE canal_venda END AS canal, id_produto, nome_produto, categoria, marca, receita, quantidade, id_cliente, nome_cliente, estado, regiao FROM projeto_ao_vivo.gold.vendas_detalhadas;"
+        }
+    ],
+    "pages": [
+        {
+            "name": "Visão Comercial",
+            "layout": [
+                {
+                    "widget": {
+                        "title": "Receita Total",
+                        "type": "counter",
+                        "dataset": "ds_comercial",
+                        "options": {
+                            "field": "receita",
+                            "aggregation": "SUM",
+                            "format": "currency"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Total de Vendas",
+                        "type": "counter",
+                        "dataset": "ds_comercial",
+                        "options": {
+                            "field": "id_venda",
+                            "aggregation": "COUNT"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Ticket Médio",
+                        "type": "counter",
+                        "dataset": "ds_comercial",
+                        "options": {
+                            "expression": "SUM(receita) / COUNT(id_venda)",
+                            "format": "currency"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Receita por Canal",
+                        "type": "bar",
+                        "dataset": "ds_comercial",
+                        "options": {
+                            "x": "canal",
+                            "y": "SUM(receita)"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Evolução Temporal da Receita",
+                        "type": "line",
+                        "dataset": "ds_comercial",
+                        "options": {
+                            "x": "data_venda",
+                            "y": "SUM(receita)"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

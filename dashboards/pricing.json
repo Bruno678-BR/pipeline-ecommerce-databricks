@@ -1,0 +1,59 @@
+{
+    "display_name": "03 - Diretoria de Pricing",
+    "warehouse_id": "serverless_starter_warehouse",
+    "datasets": [
+        {
+            "name": "ds_pricing",
+            "query": "SELECT id_produto, nome_produto, categoria, marca, preco_nosso, preco_concorrente, diferenca_preco, pct_diferenca_preco, classificacao_preco, total_vendas, receita, possui_preco_suspeito FROM projeto_ao_vivo.gold.precos_competitividade;"
+        }
+    ],
+    "pages": [
+        {
+            "name": "Visão Pricing",
+            "layout": [
+                {
+                    "widget": {
+                        "title": "Produtos Monitorados",
+                        "type": "counter",
+                        "dataset": "ds_pricing",
+                        "options": {
+                            "field": "id_produto",
+                            "aggregation": "COUNT"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Produtos Mais Caros Confirmados",
+                        "type": "counter",
+                        "dataset": "ds_pricing",
+                        "options": {
+                            "expression": "COUNT_IF(classificacao_preco = 'MAIS_CARO_QUE_TODOS' AND possui_preco_suspeito = FALSE)"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Produtos com Preço Suspeito",
+                        "type": "counter",
+                        "dataset": "ds_pricing",
+                        "options": {
+                            "expression": "COUNT_IF(possui_preco_suspeito = TRUE)"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Classificação de Competitividade de Preço",
+                        "type": "bar",
+                        "dataset": "ds_pricing",
+                        "options": {
+                            "x": "classificacao_preco",
+                            "y": "COUNT(id_produto)"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

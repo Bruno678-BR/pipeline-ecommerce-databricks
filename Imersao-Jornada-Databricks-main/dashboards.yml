@@ -1,0 +1,8 @@
+resources:
+  dashboards:
+    diretoria_comercial:
+      file_path: ./dashboards/diretoria_comercial.json
+    customer_success:
+      file_path: ./dashboards/customer_success.json
+    pricing:
+      file_path: ./dashboards/pricing.json

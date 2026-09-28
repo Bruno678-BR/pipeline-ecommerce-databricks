@@ -1,0 +1,62 @@
+{
+    "display_name": "02 - Customer Success",
+    "warehouse_id": "serverless_starter_warehouse",
+    "datasets": [
+        {
+            "name": "ds_cs",
+            "query": "SELECT id_cliente, nome_cliente, estado, nome_estado, regiao, total_compras, receita, ticket_medio, primeira_compra, ultima_compra, segmento_cliente, ranking_receita FROM projeto_ao_vivo.gold.clientes_segmentacao;"
+        }
+    ],
+    "pages": [
+        {
+            "name": "Visão Customer Success",
+            "layout": [
+                {
+                    "widget": {
+                        "title": "Total de Clientes",
+                        "type": "counter",
+                        "dataset": "ds_cs",
+                        "options": {
+                            "field": "id_cliente",
+                            "aggregation": "COUNT"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Clientes VIP",
+                        "type": "counter",
+                        "dataset": "ds_cs",
+                        "options": {
+                            "field": "segmento_cliente",
+                            "filter": "segmento_cliente = 'VIP'",
+                            "aggregation": "COUNT"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Distribuição de Clientes por Segmento",
+                        "type": "pie",
+                        "dataset": "ds_cs",
+                        "options": {
+                            "category": "segmento_cliente",
+                            "value": "COUNT(id_cliente)"
+                        }
+                    }
+                },
+                {
+                    "widget": {
+                        "title": "Receita por Região",
+                        "type": "bar",
+                        "dataset": "ds_cs",
+                        "options": {
+                            "x": "regiao",
+                            "y": "SUM(receita)"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,261 @@
+{
+  "version": 2,
+  "config": {
+    "sample_questions": [
+      {
+        "id": "0185652a8eb0a74ef3d0e557736ddf24",
+        "question": [
+          "Qual categoria está mais cara que o mercado?"
+        ]
+      },
+      {
+        "id": "05d1a7d59ec433ecb3ee764a1003d451",
+        "question": [
+          "Qual foi a receita total do período?"
+        ]
+      },
+      {
+        "id": "481266223a5ecbf63139902fe862234b",
+        "question": [
+          "Qual canal vende mais: e-commerce ou loja física?"
+        ]
+      },
+      {
+        "id": "4f2e5a3c557a41f7b115a157f6ac82aa",
+        "question": [
+          "Quem são os 10 melhores clientes?"
+        ]
+      },
+      {
+        "id": "915950fc5fb1666612655cccd81f1e9d",
+        "question": [
+          "Quais produtos estão mais caros que todos os concorrentes?"
+        ]
+      },
+      {
+        "id": "98ccc476648f906955bdfd48620de51e",
+        "question": [
+          "Quantos clientes VIP temos e quanto eles representam da receita?"
+        ]
+      }
+    ]
+  },
+  "data_sources": {
+    "tables": [
+      {
+        "identifier": "projeto_ao_vivo.gold.clientes_segmentacao",
+        "column_configs": [
+          {
+            "column_name": "estado",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true,
+            "synonyms": [
+              "UF"
+            ]
+          },
+          {
+            "column_name": "regiao",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "segmento_cliente",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true,
+            "synonyms": [
+              "segmento",
+              "perfil",
+              "categoria de cliente"
+            ]
+          }
+        ]
+      },
+      {
+        "identifier": "projeto_ao_vivo.gold.precos_competitividade",
+        "column_configs": [
+          {
+            "column_name": "categoria",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "classificacao_preco",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true,
+            "synonyms": [
+              "posição de preço",
+              "competitividade"
+            ]
+          }
+        ]
+      },
+      {
+        "identifier": "projeto_ao_vivo.gold.vendas_produtos",
+        "column_configs": [
+          {
+            "column_name": "categoria",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "marca",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "receita",
+            "synonyms": [
+              "faturamento"
+            ]
+          }
+        ]
+      },
+      {
+        "identifier": "projeto_ao_vivo.gold.vendas_temporais",
+        "column_configs": [
+          {
+            "column_name": "canal_venda",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true,
+            "synonyms": [
+              "canal",
+              "site",
+              "loja"
+            ]
+          },
+          {
+            "column_name": "dia_semana",
+            "enable_entity_matching": true,
+            "enable_format_assistance": true
+          },
+          {
+            "column_name": "receita",
+            "synonyms": [
+              "faturamento",
+              "vendas em reais",
+              "receita bruta"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "instructions": {
+    "text_instructions": [
+      {
+        "id": "5c32917a77a14cff49921093951111cb",
+        "content": [
+          "Você atende três diretores de um e-commerce brasileiro: Comercial (vendas), Customer Success (clientes) e Pricing (preços). Responda sempre em português do Brasil.\n",
+          "Valores monetários estão em reais (R$). Mostre com duas casas decimais.\n",
+          "Receita = receita bruta (quantidade × preço unitário). Não existe custo, margem ou lucro nos dados: se perguntarem sobre lucro, diga que só há receita.\n",
+          "O período dos dados vai de 13/12/2025 a 11/01/2026 (cerca de 30 dias). \"No mês\", \"no período\" ou \"até agora\" significam o período inteiro. Não use current_date(), porque os dados não chegam até hoje.\n",
+          "Perguntas de receita, vendas ou ticket médio ao longo do tempo, por dia da semana, hora ou canal: use vendas_temporais. Ticket médio = SUM(receita) / SUM(total_vendas). Nunca some clientes_unicos entre linhas.\n",
+          "Perguntas por produto, categoria ou marca: use vendas_produtos. Para contar produtos use id_produto, porque há produtos diferentes com o mesmo nome.\n",
+          "Perguntas sobre clientes, segmentos, estados ou regiões: use clientes_segmentacao. Segmentos: VIP (receita a partir de R$ 22.000), TOP_TIER (R$ 17.000 a R$ 21.999,99), REGULAR (abaixo de R$ 17.000).\n",
+          "Perguntas de preço, concorrência ou competitividade: use precos_competitividade. Concorrentes monitorados: Mercado Livre, Amazon, Magalu e Shopee. diferenca_pct_vs_media está em pontos percentuais (10 = 10% mais caro). \"Mais caro que o mercado\" = diferenca_pct_vs_media > 0; \"mais caro que todos\" = classificacao_preco = 'MAIS_CARO_QUE_TODOS'.\n",
+          "Ao comparar dias da semana, lembre que o período tem 5 sábados e 5 domingos, mas só 4 de cada dia útil. Mostre também a receita média por dia (SUM(receita) / COUNT(DISTINCT data)).\n",
+          "Canais: ecommerce (site) e loja_fisica. Ao exibir, escreva \"E-commerce\" e \"Loja física\".\n",
+          "Em rankings, ordene do maior para o menor e limite a 10 linhas, salvo pedido diferente."
+        ]
+      }
+    ],
+    "example_question_sqls": [
+      {
+        "id": "27af438837c5278a2b0b4f6847a24241",
+        "question": [
+          "Qual foi a receita total do período?"
+        ],
+        "sql": [
+          "SELECT SUM(receita) AS receita_total FROM projeto_ao_vivo.gold.vendas_temporais"
+        ]
+      },
+      {
+        "id": "37c93f582a1b2e419067cffaec2488a2",
+        "question": [
+          "Qual a competitividade de preço por categoria?"
+        ],
+        "sql": [
+          "SELECT categoria, COUNT(*) AS produtos, ROUND(AVG(diferenca_pct_vs_media), 1) AS diferenca_media_pct, COUNT_IF(classificacao_preco = 'MAIS_CARO_QUE_TODOS') AS mais_caros_que_todos FROM projeto_ao_vivo.gold.precos_competitividade GROUP BY categoria ORDER BY diferenca_media_pct DESC"
+        ]
+      },
+      {
+        "id": "72b49b4167b09bd9f70724c4e1790ebe",
+        "question": [
+          "Qual canal vende mais?"
+        ],
+        "sql": [
+          "SELECT canal_venda, SUM(total_vendas) AS vendas, SUM(receita) AS receita, ROUND(SUM(receita) / SUM(total_vendas), 2) AS ticket_medio FROM projeto_ao_vivo.gold.vendas_temporais GROUP BY canal_venda ORDER BY receita DESC"
+        ]
+      },
+      {
+        "id": "7d6e3ebcee7ca1dcc37df5b7f47543d4",
+        "question": [
+          "Qual dia da semana vende mais?"
+        ],
+        "sql": [
+          "SELECT dia_semana, SUM(receita) AS receita, COUNT(DISTINCT data) AS dias_no_periodo, ROUND(SUM(receita) / COUNT(DISTINCT data), 2) AS receita_media_por_dia FROM projeto_ao_vivo.gold.vendas_temporais GROUP BY dia_semana, dia_semana_num ORDER BY dia_semana_num"
+        ]
+      },
+      {
+        "id": "80738c86da0ca5150039d6741c1d29c2",
+        "question": [
+          "Quais são os produtos que mais faturaram?"
+        ],
+        "sql": [
+          "SELECT ranking_receita, nome_produto, categoria, receita, itens_vendidos FROM projeto_ao_vivo.gold.vendas_produtos WHERE ranking_receita <= 10 ORDER BY ranking_receita"
+        ]
+      },
+      {
+        "id": "9068845d9c48caa7c5f6075b4606c37d",
+        "question": [
+          "Qual a receita por dia?"
+        ],
+        "sql": [
+          "SELECT data, SUM(receita) AS receita, SUM(total_vendas) AS vendas FROM projeto_ao_vivo.gold.vendas_temporais GROUP BY data ORDER BY data"
+        ]
+      },
+      {
+        "id": "9c4fc6fe408f026bb6eee895b1671426",
+        "question": [
+          "Quantos clientes temos em cada segmento?"
+        ],
+        "sql": [
+          "SELECT segmento_cliente, COUNT(*) AS clientes, SUM(receita) AS receita, ROUND(SUM(receita) * 100 / SUM(SUM(receita)) OVER (), 1) AS pct_receita FROM projeto_ao_vivo.gold.clientes_segmentacao GROUP BY segmento_cliente ORDER BY receita DESC"
+        ]
+      }
+    ],
+    "join_specs": [
+      {
+        "id": "dcd94920c1b4f38fa6f42e3fce3ab52a",
+        "left": {
+          "identifier": "projeto_ao_vivo.gold.vendas_produtos",
+          "alias": "vendas_produtos"
+        },
+        "right": {
+          "identifier": "projeto_ao_vivo.gold.precos_competitividade",
+          "alias": "precos_competitividade"
+        },
+        "sql": [
+          "`vendas_produtos`.`id_produto` = `precos_competitividade`.`id_produto`",
+          "--rt=FROM_RELATIONSHIP_TYPE_ONE_TO_ONE--"
+        ]
+      }
+    ],
+    "sql_snippets": {
+      "measures": [
+        {
+          "id": "0d6fda6b3603de8a90194316d53af4b3",
+          "alias": "ticket_medio",
+          "display_name": "Ticket médio",
+          "sql": [
+            "SUM(vendas_temporais.receita) / SUM(vendas_temporais.total_vendas)"
+          ],
+          "synonyms": [
+            "valor médio por venda",
+            "ticket"
+          ]
+        }
+      ]
+    }
+  }
+}

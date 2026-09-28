@@ -1,0 +1,13 @@
+# Definição do Lakeflow Declarative Pipeline para projeto_ecommerce
+
+resources:
+  pipelines:
+    pipeline_ecommerce:
+      name: pipeline_ecommerce
+      catalog: ${var.catalog}
+      target: ${var.schema}
+      serverless: true
+
+      libraries:
+        - glob:
+            include: ../transformations/**
